@@ -1,4 +1,4 @@
-# LiveView Dec 9 class info. Your homework. 
+# LiveView Kenya, December 2020, class info. Your homework. 
 
 ## 1 Install these tools, plus Elixir, plus Phoenix. 
 
