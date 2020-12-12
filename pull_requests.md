@@ -2,6 +2,8 @@
 
 Bruce Tate
 
+Getty Orawo
+
 Horasmas B. Dragon
 
 Wanjiku Macharia
