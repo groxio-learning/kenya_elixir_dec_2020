@@ -14,6 +14,8 @@ Okoth Kongo
 
 Magak Emmanuel
 
+Frank Midigo
+
 Tracey Onim
 
 Dennis Thomi
