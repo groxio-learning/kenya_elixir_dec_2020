@@ -12,4 +12,4 @@ Okoth Kongo
 
 Magak Emmanuel
 
-Linda Achieng'
+Dennis Thomi
