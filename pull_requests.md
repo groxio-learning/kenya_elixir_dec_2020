@@ -2,6 +2,8 @@
 
 Bruce Tate
 
+Getty Orawo
+
 Horasmas B. Dragon
 
 Wanjiku Macharia
@@ -13,5 +15,7 @@ Okoth Kongo
 Magak Emmanuel
 
 Frank Midigo
+
+Tracey Onim
 
 Dennis Thomi
