@@ -13,3 +13,5 @@ Okoth Kongo
 Magak Emmanuel
 
 Frank Midigo
+
+Dennis Thomi
