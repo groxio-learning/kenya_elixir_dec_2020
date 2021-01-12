@@ -1,39 +1,33 @@
 defmodule Score do
 
-  def new(answer, score) when answer == score do
+  def new(answer, guess) when answer == guess do
     %{reds: 4, whites: 0}
   end
 
-  def new(answer, score)  do
-    other_orders(answer, score)
+  def new(answer, guess)  do
+    guess_check(answer, guess)
   end
 
-  defp elements_on_the_same_position(answer, score) do
+  defp no_of_reds(answer, guess) do
       answer
-      |> Enum.zip(score)
+      |> Enum.zip(guess)
       |> Enum.filter(fn {x,y} -> x==y end)
+      |> Enum.count()
   end
 
-  defp elements_remaining_in_answer(answer, score) do
-    elements_the_same_position =
-    answer
-    |> elements_on_the_same_position(score)
-    |> Enum.map(fn {_x,y}-> y end)
+  defp no_of_whites(answer, guess) do
+    misses = 
+    guess 
+    |> Kernel.--(answer)
+    |> length()
 
-    answer -- elements_the_same_position
+    length(answer) - misses - no_of_reds(answer, guess)
   end
 
-  defp number_of_white_elements(answer, score) do
-    answer
-    |> elements_remaining_in_answer(score)
-    |> Enum.filter(fn el -> Enum.member?(score, el)end)
-    |> Enum.count()
-  end
-
-  defp other_orders(answer, score) do
-    number_of_white_values = number_of_white_elements(answer, score)
-    number_of_red_values = elements_on_the_same_position(answer, score) |> Enum.count()
-    %{reds: number_of_red_values, whites:  number_of_white_values  }
+  defp guess_check(answer, guess) do
+    reds = no_of_reds(answer, guess)
+    whites = no_of_whites(answer, guess)
+    %{reds: reds, whites:  whites }
   end
 end
 
