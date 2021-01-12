@@ -10,4 +10,3 @@ defmodule MindGame.Board do
   end
 
 end
-
