@@ -1,4 +1,5 @@
 defmodule MindGame.Board do
+  alias __MODULE__
   defstruct [:answer, :guesses]
 
   def new(answer) do
@@ -6,48 +7,42 @@ defmodule MindGame.Board do
   end
 
   def guess(board, guess) do
-    %{ board | guesses: [guess|board.guesses]}
+    %{board | guesses: [guess | board.guesses]}
   end
 
-  def check(board, max_rows) do
-    %{rows: Enum.map(board.guesses, fn guess -> %{guess: guess, score: score(guess, board.answer)} end)}
-    |> put_status(max_rows)
-  
+  def check(board, max_rows \\ 4) do
+    %{rows: rows(board), status: status(board, max_rows)}
   end
 
-  defp put_status(%{rows: [row | _]} = result, max_rows) do
-   status =  cond do
-     Enum.count(result.rows) < max_rows and has_white_or_none_keys?(row.score) ->
-        :playing
+  defp rows(%Board{guesses: guesses, answer: ans}) do
+    Enum.map(guesses, fn guess -> %{guess: guess, score: score(guess, ans)} end)
+  end
 
-      Enum.count(result.rows) <= max_rows and !has_white_or_none_keys?(row.score) ->
-        :won 
+  defp status(%Board{answer: ans, guesses: [guess | _]}, _max_rows) when ans == guess do
+    :won
+  end
 
-      true ->
+  defp status(%Board{guesses: guesses}, max_rows) do
+    if Enum.count(guesses) < max_rows do
+      :playing
+    else
       :lost
-
-     end
-      Map.merge(result, %{status: status})
+    end
   end
 
-  defp has_white_or_none_keys?(score) do
-    Map.has_key?(score, :white) or Map.has_key?(score, :none)
+  defp score(ans, guess) do
+    ans
+    |> Enum.zip(guess)
+    |> Enum.frequencies_by(fn {x, y} ->
+      cond do
+        x == y -> :red
+        y in wrong_answers(ans, guess) -> :none
+        true -> :white
+      end
+    end)
   end
 
-
-
-defp score(guess, ans) do
- wrong_answers =  guess -- ans
- Enum.zip(ans, guess) |> Enum.frequencies_by(fn {x, y} ->  
- cond do
-   x == y -> :red
-   y in wrong_answers -> :none
-  true -> :white
-     
- end
- 
- end)
-end
-
-
+  defp wrong_answers(ans, guess) do
+    guess -- ans
+  end
 end
