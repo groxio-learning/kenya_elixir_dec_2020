@@ -1,4 +1,4 @@
-defmodule Score do
+defmodule Gwiji.Game.Score do
 
   def new(answer, guess) when answer == guess do
     %{reds: 4, whites: 0}
