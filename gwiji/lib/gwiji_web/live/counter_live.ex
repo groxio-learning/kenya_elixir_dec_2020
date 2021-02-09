@@ -3,34 +3,42 @@ defmodule GwijiWeb.CounterLive do
   alias Gwiji.Game.Board
 
   # constructor
-  def mount(_params, _session, %{assigns: assigns}=socket) do
-    board = Board.new()
-    {:ok, assign(socket, count: 0, board: board, status: Board.check(board))}
+  def mount(_params, _session, socket) do
+    {:ok, socket |> set_board() |> set_status()}
   end
-  
+
   # converter
   def render(assigns) do
     ~L"""
     <h1>
-      Welcome to the counter!
+      Welcome to the game!
     </h1>
-    <h2>
-      Your count: <%= @count %>
-    </h2>
     <pre>
-      Your status: <%= @status %>
+      Your status: <%= @status.status %>
     </pre>
-    <button phx-click="inc">Increment</button>
+    <button phx-click="guess">Guess</button>
     """
   end
 
   # reducer
-  def handle_event("inc", _metadata, socket) do
-    {:noreply, inc(socket)}
+  def handle_event("guess", _metadata, socket) do
+    new_board = Board.guess(socket.assigns.board, guess)
+    {:noreply, guess(socket)}
   end
-  
-  defp inc(socket) do
+
+  defp guess(socket) do
     assign(socket, count: socket.assigns.count + 1)
   end
 
+  defp set_board(socket, board \\ Board.new()) do
+    assign(socket, board: board)
+  end
+
+  defp set_status(socket) do
+    assign(socket, status: status(socket))
+  end
+
+  defp status(socket) do
+    Board.check(socket.assigns.board)
+  end
 end
