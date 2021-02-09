@@ -1,9 +1,11 @@
 defmodule GwijiWeb.CounterLive do
   use GwijiWeb, :live_view
+  alias Gwiji.Game.Board
 
   # constructor
   def mount(_params, _session, %{assigns: assigns}=socket) do
-    {:ok, assign(socket, count: 0)}
+    board = Board.new()
+    {:ok, assign(socket, count: 0, board: board, status: Board.check(board))}
   end
   
   # converter
@@ -15,6 +17,9 @@ defmodule GwijiWeb.CounterLive do
     <h2>
       Your count: <%= @count %>
     </h2>
+    <pre>
+      Your status: <%= @status %>
+    </pre>
     <button phx-click="inc">Increment</button>
     """
   end
