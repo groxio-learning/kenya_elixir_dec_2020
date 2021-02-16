@@ -16,6 +16,26 @@ defmodule GwijiWeb.CounterLive do
     <pre>
       Your status: <%= @status.status %>
     </pre>
+    <table>
+      <thead>
+        <tr>
+          <%= for _ans <- @board.answer do %>
+            <th>?</th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for i <- 1..10 do %>
+          <tr>
+            <td> - </td>
+            <td> - </td>
+            <td> - </td>
+            <td> - </td>
+            <td> x </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
     <button phx-click="guess">Guess</button>
     """
   end
