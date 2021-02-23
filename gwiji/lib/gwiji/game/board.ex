@@ -5,24 +5,45 @@ defmodule Gwiji.Game.Board do
   def new(answer) do
     %__MODULE__{answer: answer, guesses: []}
   end
-  
+
   def new do
     random_answer
     |> new
   end
-  
+
+  def changeset(params \\ %{}) do
+    board = %{}
+    types = %{guess: :string}
+
+    {board, types}
+    |> Ecto.Changeset.cast(params, Map.keys(types))
+    |> Ecto.Changeset.validate_required([:guess])
+    |> Ecto.Changeset.validate_length(:guess, is: 4)
+    |> valid_format()
+  end
+
+  defp valid_format(changeset) do
+    Ecto.Changeset.validate_change(changeset, :guess, fn :guess, guess ->
+      if guess == "1234" do
+        []
+      else
+        [guess: "invalid"]
+      end
+    end)
+  end
+
   # no repeats
   defp random_answer do
     1..8
-    |> Enum.shuffle
+    |> Enum.shuffle()
     |> Enum.take(4)
   end
-  
+
   # allows repeats
   # defp random_answer do
   #   fn -> :random.uniform(8) end |> Stream.repeatedly |> Enum.take(4)
   # end
-  
+
   def guess(board, guess) do
     %{board | guesses: [guess | board.guesses]}
   end
@@ -33,9 +54,9 @@ defmodule Gwiji.Game.Board do
 
   defp rows(%__MODULE__{guesses: guesses, answer: ans}) do
     Enum.map(
-      guesses, 
-      fn guess -> 
-        %{guess: guess, score: score(guess, ans)} 
+      guesses,
+      fn guess ->
+        %{guess: guess, score: score(guess, ans)}
       end
     )
   end
