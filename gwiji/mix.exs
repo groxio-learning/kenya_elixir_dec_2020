@@ -34,6 +34,8 @@ defmodule Gwiji.MixProject do
   defp deps do
     [
       {:phoenix, "~> 1.5.7"},
+      {:phoenix_ecto, "~> 4.1"},
+      {:ecto_sql, "~> 3.4"},
       {:phoenix_live_view, "~> 0.15.0"},
       {:floki, ">= 0.27.0", only: :test},
       {:phoenix_html, "~> 2.11"},
