@@ -29,8 +29,8 @@ defmodule GwijiWeb.CounterLive do
 
   # reducer
   def handle_event("guess", %{"guess" => guess} = params, socket) do
-    params
-    |> Board.changeset()
+    socket.assigns.board
+    |> Board.changeset(params)
     |> validate(socket, guess)
   end
 
@@ -61,6 +61,7 @@ defmodule GwijiWeb.CounterLive do
   # end
 
   defp set_board(socket, board \\ Board.new()) do
+    IO.inspect(board)
     assign(socket, board: board)
   end
 
