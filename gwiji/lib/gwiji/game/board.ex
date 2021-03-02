@@ -11,8 +11,7 @@ defmodule Gwiji.Game.Board do
     |> new
   end
 
-  def changeset(params \\ %{}) do
-    board = %{}
+  def changeset(board, params \\ %{}) do
     types = %{guess: :string}
 
     {board, types}
@@ -24,7 +23,7 @@ defmodule Gwiji.Game.Board do
 
   defp valid_format(changeset) do
     Ecto.Changeset.validate_change(changeset, :guess, fn :guess, guess ->
-      if guess == "1234" do
+      if guess == changeset.data.answer |> Enum.join() do
         []
       else
         [guess: "invalid"]
