@@ -11,25 +11,31 @@ defmodule Gwiji.Game.Board do
     |> new
   end
 
-  def changeset(board, params \\ %{}) do
+  def validate(%{"guess" => _string} = params) do
     types = %{guess: :string}
 
-    {board, types}
+    {%{}, types}
     |> Ecto.Changeset.cast(params, Map.keys(types))
     |> Ecto.Changeset.validate_required([:guess])
     |> Ecto.Changeset.validate_length(:guess, is: 4)
-    |> valid_format()
+    |> validate_guess()
   end
 
-  defp valid_format(changeset) do
+  defp validate_guess(changeset) do
     Ecto.Changeset.validate_change(changeset, :guess, fn :guess, guess ->
-      if guess == changeset.data.answer |> Enum.join() do
-        []
-      else
-        [guess: "invalid"]
-      end
+      guess 
+      |> valid_guess?()
+      |> guess_response()
     end)
   end
+
+  defp valid_guess?(guess) do
+    guess |> String.to_charlist() |> Enum.all?(fn codepoint -> codepoint in (?1..?8) end)
+  end
+
+  defp guess_response(true), do: []
+
+  defp guess_response(false), do: [guess: "invalid"]
 
   # no repeats
   defp random_answer do
