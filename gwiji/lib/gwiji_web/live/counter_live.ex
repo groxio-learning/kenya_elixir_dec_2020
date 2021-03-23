@@ -7,7 +7,7 @@ defmodule GwijiWeb.CounterLive do
     {:ok,
      socket
      |> set_board()
-     |> set_status()
+     |> set_game()
      |> set_initial_count()}
   end
 
@@ -17,8 +17,11 @@ defmodule GwijiWeb.CounterLive do
     <h1>
       Welcome to the game!
     </h1>
+    <%= for row <- @game.rows do %>
+    <%= inspect row %>
+    <% end %>
     <pre>
-      Your status: <%= @status.status %>
+      Your status: <%= @game.status %>
     </pre>
     <form phx-submit="guess">
     <input type="text" name="guess">
@@ -38,8 +41,7 @@ defmodule GwijiWeb.CounterLive do
     if changeset.valid? do
       {:noreply,
        update_board(socket, guess)
-       |> put_flash(:info, "Sucess")
-       |> redirect(to: Routes.live_path(socket, __MODULE__))}
+       |> set_game()}
     else
       {:noreply,
        update_board(socket, guess)
@@ -62,14 +64,10 @@ defmodule GwijiWeb.CounterLive do
 
   defp set_board(socket, board \\ Board.new()) do
     IO.inspect(board)
-    assign(socket, board: board)
+    assign(socket, board: board |> Board.guess([8, 5, 1, 4]) |> Board.guess([2, 3, 5, 7]))
   end
 
-  defp set_status(socket) do
-    assign(socket, status: status(socket))
-  end
-
-  defp status(socket) do
-    Board.check(socket.assigns.board)
+  defp set_game(socket) do
+    assign(socket, game: Board.check(socket.assigns.board))
   end
 end
