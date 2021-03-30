@@ -39,9 +39,11 @@ defmodule GwijiWeb.CounterLive do
 
   defp validate(changeset, socket, guess) do
     if changeset.valid? do
-      {:noreply,
-       update_board(socket, guess)
-       |> set_game()}
+      {
+        :noreply,
+        update_board(socket, guess)
+        |> set_game()
+      }
     else
       {:noreply,
        update_board(socket, guess)
@@ -51,6 +53,9 @@ defmodule GwijiWeb.CounterLive do
   end
 
   defp update_board(socket, guess) do
+    {guess, _} = Integer.parse(guess)
+    guess = Integer.digits(guess)
+
     assign(socket, board: Board.guess(socket.assigns.board, guess))
   end
 
@@ -58,12 +63,7 @@ defmodule GwijiWeb.CounterLive do
     assign(socket, count: 0)
   end
 
-  # defp guess(socket) do
-  #   assign(socket, count: socket.assigns.count + 1)
-  # end
-
   defp set_board(socket, board \\ Board.new()) do
-    IO.inspect(board)
     assign(socket, board: board |> Board.guess([8, 5, 1, 4]) |> Board.guess([2, 3, 5, 7]))
   end
 
