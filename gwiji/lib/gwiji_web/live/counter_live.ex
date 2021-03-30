@@ -18,7 +18,17 @@ defmodule GwijiWeb.CounterLive do
       Welcome to the game!
     </h1>
     <%= for row <- @game.rows do %>
-    <%= inspect row %>
+    <table>
+    <%= for guess <- row.guess do %>
+    <td> <%=guess %> </td>
+    <% end %>
+    <%= for {color, score} <- row.score do %>
+    <th><%= color %></th>
+    <td><%= score %></td>
+    <% end %>
+
+    </table>
+
     <% end %>
     <pre>
       Your status: <%= @game.status %>
